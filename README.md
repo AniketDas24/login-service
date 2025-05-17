@@ -32,7 +32,7 @@ This service handles **user registration and verification** via **email confirma
 - **Spring Security**
 - **PostgreSQL**
 - **Spring Data JPA**
-- **Jakarta Mail / JavaMail Sender**
+- **JavaMail Sender**
 
 ---
 
