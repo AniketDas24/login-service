@@ -2,6 +2,11 @@
 
 Welcome to the **Login Service** for the **Gym Progress Tracker** app – a secure and scalable authentication microservice that ensures your users are verified before they flex their data!
 
+## 📽️ Working Demo
+
+🎥 [Click here to watch the demo](https://drive.google.com/file/d/1x84ZVGFYbSIgCZcN3p8RinCNhLXIdVyB/view?usp=sharing)
+
+---
 ## 🔐 What It Does
 
 This service handles **user registration and verification** via **email confirmation**, enforcing security before users are allowed to log in. Here's how it works:
