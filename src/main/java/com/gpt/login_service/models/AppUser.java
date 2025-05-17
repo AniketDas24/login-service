@@ -14,7 +14,7 @@ import java.util.Collections;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@Entity(name = "users")
+@Entity
 public class AppUser implements UserDetails {
 
     @Id
@@ -30,23 +30,19 @@ public class AppUser implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    private Boolean isLocked;
-    private Boolean isExpired;
+    private Boolean isLocked = false;
+    private Boolean isEnabled = false;
 
     public AppUser(String firstName,
                    String lastName,
                    String password,
                    String email,
-                   UserRole userRole,
-                   Boolean isLocked,
-                   Boolean isExpired) {
+                   UserRole userRole) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.userRole = userRole;
-        this.isLocked = isLocked;
-        this.isExpired = isExpired;
     }
 
     @Override
@@ -67,7 +63,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return !isExpired;
+        return true;
     }
 
     @Override
@@ -77,11 +73,11 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !isExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return isEnabled;
     }
 }
