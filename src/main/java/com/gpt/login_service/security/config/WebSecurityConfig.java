@@ -27,14 +27,16 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/register", "/login", "/error").permitAll()
+                        .requestMatchers("/api/v1/register/**", "/error", "/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic();
+                .formLogin(form -> form
+                        .permitAll()
+                );
 
         return http.build();
     }
+
 
     // Authentication manager with custom provider
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

@@ -1,7 +1,7 @@
 package com.gpt.login_service.repository;
 
 
-import com.gpt.login_service.models.AppUser;
+import com.gpt.login_service.models.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +13,15 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface   AppUserRepository extends JpaRepository<AppUser, Long> {
-    Optional<AppUser> findByEmail(String email);
+public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Long> {
+    Optional<ConfirmationToken> findByToken(String token);
 
     @Transactional
     @Modifying
-    @Query("UPDATE AppUser a SET a.isEnabled = true WHERE a.email = ?1")
-    int enableUser(String email);
+    @Query("UPDATE ConfirmationToken c " +
+            "SET c.verifiedAt = ?2 " +
+            "WHERE c.token = ?1")
+    int updateVerifiedAt(String token,
+                         LocalDateTime verifiedAt);
+
 }
