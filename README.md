@@ -50,18 +50,31 @@ This service handles **user registration and verification** via **email confirma
 
 ---
 
-## ⚙️ Configuration (`application.properties` / YAML)
 
-Make sure to set your email SMTP configuration and DB credentials, e.g.:
+# 🛡️ Security First
 
-```properties
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=your-email@gmail.com
-spring.mail.password=your-app-password
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
+- All tokens are **time-bound** to prevent misuse.
+- **Unverified users** are blocked from logging in.
+- Emails use **TLS-encrypted SMTP**.
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/yourdb
-spring.datasource.username=psql
-spring.datasource.password=your-password
+# 🚀 Getting Started
+
+```bash
+# Clone the repository
+
+git clone **https://github.com/AniketDas24/login-service.git**
+
+# Navigate into the project
+cd login-service
+
+# Run the application
+./mvnw spring-boot:run
+```
+
+# 📌 Future Improvements
+
+- Password reset flow
+- JWT-based login session handling
+- Rate limiting on registration attempts
+- Logging and monitoring integration
+
