@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class RegisterRequest {
+public class CreateAdminRequest {
     private String firstName;
     private String lastName;
     private String email;

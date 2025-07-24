@@ -2,6 +2,7 @@ package com.gpt.login_service.repository;
 
 
 import com.gpt.login_service.models.AppUser;
+import com.gpt.login_service.models.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface   AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
+    Optional<AppUser> findByUserRole(UserRole userRole);
 
     @Transactional
     @Modifying
