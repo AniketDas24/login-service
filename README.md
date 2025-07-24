@@ -1,32 +1,41 @@
 # 💪 Login Service – Gym Progress Tracker
 
-Welcome to the **Login Service** for the **Gym Progress Tracker** app – a secure and scalable authentication microservice that ensures your users are verified before they flex their data!
+Welcome to the **Login Service** for the **Gym Progress Tracker** app – a secure and scalable authentication microservice that ensures your users are verified and authorized before they flex their data!
 
 ## 📽️ Working Demo
 
 🎥 [Click here to watch the demo](https://drive.google.com/file/d/1x84ZVGFYbSIgCZcN3p8RinCNhLXIdVyB/view?usp=sharing)
 
 ---
+
 ## 🔐 What It Does
 
-This service handles **user registration and verification** via **email confirmation**, enforcing security before users are allowed to log in. Here's how it works:
+This service manages **admin creation, user registration, email verification**, and **JWT-based role-based authentication**, ensuring only valid users and authorized roles can access the system.
 
-1. 📝 **User Registration**  
-   - Users call the `/api/v1/register` API with their details.  
-   - Data is saved in a **PostgreSQL** database.  
-   - A **unique verification token** is generated for the user.
+### 🔁 Updated Workflow
 
-2. 📧 **Email Verification**  
-   - An email is sent to the user with a **confirmation link** containing the token.  
-   - The token has a **limited validity period** to enhance security.
+1. 🛡️ **Admin Creation**  
+   - Only one admin can be created via the `/admin/createAdmin` endpoint.  
+   - The response includes a **JWT token** with `ADMIN` privileges.  
+   - This JWT must be used in the `Authorization` header to register users.
 
-3. ✅ **Verification Flow**  
-   - When the user clicks the confirmation link (`/api/v1/register/confirmToken?token=...`), their account is **activated**.  
-   - If the token is **expired or invalid**, verification fails and the user is prompted to re-register.
+2. 📝 **User Registration (Admin-Only)**  
+   - Admin sends a request to `/api/v1/register` with user details.  
+   - The system validates the request using the **admin’s JWT**.  
+   - If valid, a new user is saved in the database, and a **JWT-based email verification token** is generated.
 
-4. 🔐 **Login Enforcement**  
-   - Only **verified users** can successfully log in.  
-   - This ensures that fake or inactive accounts don’t make it past the front door.
+3. 📧 **Email Verification**  
+   - A verification email is sent to the user with a **JWT link**.  
+   - Clicking the link calls `/api/v1/register/confirmToken?token=...`.  
+   - This verifies the user account if the token is valid and unexpired.
+
+4. ✅ **User Login (Post Verification Only)**  
+   - Only after the user verifies their email, their JWT becomes usable.  
+   - Verified users can log in and receive a JWT for accessing protected routes.
+
+5. 🔐 **Role-Based Access**  
+   - Admins and users have different roles.  
+   - Routes are protected using Spring Security’s `hasRole()` or `hasAuthority()` checks.
 
 ---
 
@@ -35,46 +44,44 @@ This service handles **user registration and verification** via **email confirma
 - **Java 17+**
 - **Spring Boot**
 - **Spring Security**
-- **PostgreSQL**
 - **Spring Data JPA**
-- **JavaMail Sender**
+- **PostgreSQL**
+- **JavaMailSender**
+- **JWT (JSON Web Token)**
 
 ---
 
 ## 📦 API Endpoints
 
-| Method | Endpoint                            | Description                      |
-|--------|-------------------------------------|----------------------------------|
-| POST   | `/api/v1/register`                  | Register a new user              |
-| GET    | `/api/v1/register/confirmToken`     | Confirm email verification token |
+| Method | Endpoint                            | Access       | Description                                |
+|--------|-------------------------------------|--------------|--------------------------------------------|
+| POST   | `/admin/createAdmin`                | Public       | Create a single admin and receive a JWT     |
+| POST   | `/api/v1/register`                  | Admin Only   | Register a new user                         |
+| GET    | `/api/v1/register/confirmToken`     | Public       | Confirm user's email via token              |
+| POST   | `/login`                            | Verified User Only | Authenticate and receive JWT         |
+| GET    | `/admin/*`                          | Admin Only   | Admin-protected endpoints                   |
+| GET    | `/user/*`                           | User Only    | Verified user-protected endpoints           |
 
 ---
 
+## 🛡️ Security First
 
-# 🛡️ Security First
-
-- All tokens are **time-bound** to prevent misuse.
+- **Strict role-based access control** with JWT.
+- Only **admins** can register users.
+- JWT tokens include roles (`ADMIN`, `USER`) and are time-bound.
 - **Unverified users** are blocked from logging in.
-- Emails use **TLS-encrypted SMTP**.
+- Email verification is required before JWT becomes usable.
 
-# 🚀 Getting Started
+---
+
+## 🚀 Getting Started
 
 ```bash
 # Clone the repository
-
-git clone **https://github.com/AniketDas24/login-service.git**
+git clone https://github.com/AniketDas24/login-service.git
 
 # Navigate into the project
 cd login-service
 
 # Run the application
 ./mvnw spring-boot:run
-```
-
-# 📌 Future Improvements
-
-- Password reset flow
-- JWT-based login session handling
-- Rate limiting on registration attempts
-- Logging and monitoring integration
-
